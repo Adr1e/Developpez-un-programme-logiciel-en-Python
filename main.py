@@ -1,8 +1,9 @@
 from controllers.tournament_controller import TournamentController
+from controllers.player_controller import PlayerController
 
 if __name__ == "__main__":
     # Ajouter des joueurs
-    # pc = PlayerController()
+    pc = PlayerController()
     # pc.add_player()
     # pc.add_player()
 
@@ -14,5 +15,4 @@ if __name__ == "__main__":
     # pc.show_all_players()
 
     # Lancer le tournoi
-    # tc = TournamentController()
     tc.start_tournament()

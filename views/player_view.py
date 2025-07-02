@@ -26,11 +26,13 @@ class PlayerView:
             print("Aucun joueur enregistré.")
             return
         for player in players:
-            print(f"- {player.first_name} {player.last_name} (Elo : {player.ranking})")
+            print(
+                f"- {player.first_name} {player.last_name} (Elo : {player.ranking})")
 
     def confirm_save(self, player):
         """Affiche un message confirmant l’enregistrement d’un joueur."""
-        print(f" Joueur {player.first_name} {player.last_name} enregistré avec succès.")
+        print(
+            f" Joueur {player.first_name} {player.last_name} enregistré avec succès.")
 
     def display_message(self, message):
         """Affiche un message générique."""

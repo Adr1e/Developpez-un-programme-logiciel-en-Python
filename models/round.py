@@ -48,6 +48,7 @@ class Round:
         round_instance = cls(name=data["name"])
         round_instance.start_time = data.get("start_time")
         round_instance.end_time = data.get("end_time")
-        round_instance.matches = [Match.from_dict(m) for m in data.get("matches", [])]
+        round_instance.matches = [Match.from_dict(
+            m) for m in data.get("matches", [])]
 
         return round_instance

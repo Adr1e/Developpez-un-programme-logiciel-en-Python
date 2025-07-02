@@ -40,6 +40,10 @@ class Tournament:
         self.rounds.append(round_obj)
         self.current_round += 1
 
+    def has_more_rounds(self):
+        """Vérifie s'il reste des rounds à jouer."""
+        return self.current_round < self.nb_rounds
+
     def __str__(self):
         """Retourne une représentation lisible du tournoi."""
         return (
@@ -59,7 +63,8 @@ class Tournament:
             "description": self.description,
             "players": [player.to_dict() for player in self.players],
             "rounds": [round_.to_dict() for round_ in self.rounds],
-            "current_round": self.current_round
+            "current_round": self.current_round,
+            "nb_rounds": self.nb_rounds
         }
 
     @classmethod
@@ -69,18 +74,18 @@ class Tournament:
             location=data["location"],
             start_date=data["start_date"],
             end_date=data["end_date"],
-            time_control=data["time_control"],  # ✅ Ajout de l'argument manquant
+            time_control=data["time_control"],
             description=data.get("description", ""),
             nb_rounds=data.get("nb_rounds", 4)
         )
         tournament.current_round = data.get("current_round", 0)
 
-        # Recharger les joueurs
         from models.player import Player
-        tournament.players = [Player.from_dict(p) for p in data.get("players", [])]
+        tournament.players = [Player.from_dict(
+            p) for p in data.get("players", [])]
 
-        # Recharger les rounds
         from models.round import Round
-        tournament.rounds = [Round.from_dict(r) for r in data.get("rounds", [])]
+        tournament.rounds = [Round.from_dict(r)
+                             for r in data.get("rounds", [])]
 
         return tournament
