@@ -33,8 +33,9 @@ class Match:
         from models.player import Player  # Import local pour éviter les boucles
 
         # Créer des joueurs "vides" avec seulement l'identifiant
-        player1 = Player("", "", "", "", data["player1"], 0)
-        player2 = Player("", "", "", "", data["player2"], 0)
+        player1 = Player("", "", "", data["player1"])
+        player2 = Player("", "", "", data["player2"])
+
 
         match = cls(player1, player2)
         match.result = tuple(data["result"]) if data["result"] else None

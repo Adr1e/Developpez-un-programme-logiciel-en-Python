@@ -24,13 +24,18 @@ class PlayerView:
             print("Le nom ne doit contenir que des lettres.")
 
         # Validation de la date
+        # Validation de la date
         while True:
             birthdate = input("Date de naissance (JJ/MM/AAAA) : ").strip()
             try:
-                datetime.strptime(birthdate, "%d/%m/%Y")
+                date_obj = datetime.strptime(birthdate, "%d/%m/%Y")
+                if date_obj > datetime.today():
+                    print(" La date de naissance ne peut pas être dans le futur.")
+                    continue
                 break
             except ValueError:
                 print(" Format invalide. Utilise JJ/MM/AAAA.")
+
 
         # Validation de l'identifiant national
         while True:
