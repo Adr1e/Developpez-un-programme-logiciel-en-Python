@@ -25,9 +25,21 @@ class PlayerController:
     def add_player(self):
         """Crée un nouveau joueur et l’enregistre."""
         player_data = self.view.get_player_info()
-        new_player = Player(**player_data)
+
+        # Vérification de doublon d'identifiant
+        if any(p.national_id == player_data["national_id"] for p in self.players):
+            self.view.display_message("Un joueur avec cet identifiant existe déjà.")
+            return
+
+        new_player = Player(
+            first_name=player_data["first_name"],
+            last_name=player_data["last_name"],
+            birthdate=player_data["birthdate"],
+            national_id=player_data["national_id"]
+        )
         self.players.append(new_player)
         self.save_players()
+        self.view.confirm_save(new_player)
 
     def show_all_players(self):
         """Affiche tous les joueurs enregistrés."""
