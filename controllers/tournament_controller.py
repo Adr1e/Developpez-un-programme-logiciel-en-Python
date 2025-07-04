@@ -4,6 +4,7 @@ from models.match import Match
 from serializers.json_saver import save_data, load_data
 from views.tournament_view import TournamentView
 from itertools import combinations
+from prettytable import PrettyTable
 
 
 class TournamentController:
@@ -101,39 +102,38 @@ class TournamentController:
 
             for p1, p2 in round_matches:
                 print(f"\nMatch : {p1.first_name} vs {p2.first_name}")
-                print("Entrez le score (1 = victoire, 0 = défaite, 0.5 = égalité). Tapez 'pause' pour interrompre le tournoi.")
+                print("(Enter score: 1 = win, 0.5 = draw, 0 = loss or type 'pause' to stop)")
                 while True:
-                    score1_input = input(f"Score de {p1.first_name} : ").strip()
+                    score1_input = input(f"Score for {p1.first_name} : ").strip()
                     if score1_input.lower() == "pause":
                         print("Tournoi mis en pause. Vous pouvez le reprendre plus tard.")
                         self.save_tournaments()
                         return
                     try:
                         score1 = float(score1_input)
-                        if score1 not in [0, 0.5, 1]:
-                            raise ValueError
-                        break
+                        if score1 in [0, 0.5, 1]:
+                            break
                     except ValueError:
-                        print("Valeur invalide. Utilisez 1, 0.5 ou 0.")
+                        pass
+                    print("Entrée invalide. Utilisez uniquement 1, 0.5 ou 0.")
 
                 while True:
-                    score2_input = input(f"Score de {p2.first_name} : ").strip()
+                    score2_input = input(f"Score for {p2.first_name} : ").strip()
                     if score2_input.lower() == "pause":
                         print("Tournoi mis en pause. Vous pouvez le reprendre plus tard.")
                         self.save_tournaments()
                         return
                     try:
                         score2 = float(score2_input)
-                        if score2 not in [0, 0.5, 1]:
-                            raise ValueError
-                        break
+                        if score2 in [0, 0.5, 1]:
+                            break
                     except ValueError:
-                        print("Valeur invalide. Utilisez 1, 0.5 ou 0.")
+                        pass
+                    print("Entrée invalide. Utilisez uniquement 1, 0.5 ou 0.")
 
                 match = Match(p1, p2)
                 match.set_result(score1, score2)
                 new_round.add_match(match)
-                print(f"Résultat enregistré : {p1.first_name} {score1} - {score2} {p2.first_name}")
 
             new_round.end_round()
             tournament.add_round(new_round)
@@ -146,8 +146,11 @@ class TournamentController:
 
     def show_final_ranking(self, tournament):
         sorted_players = sorted(tournament.players, key=lambda p: p.score, reverse=True)
+        table = PrettyTable()
+        table.field_names = ["Rank", "Player", "Score"]
         for i, player in enumerate(sorted_players, 1):
-            print(f"{i}. {player.first_name} {player.last_name} - {player.score} points")
+            table.add_row([i, f"{player.first_name} {player.last_name}", player.score])
+        print(table)
 
     def show_tournament_rounds(self, tournament):
         if not tournament.rounds:
@@ -159,3 +162,46 @@ class TournamentController:
             print(f"\n{round_.name} | Début : {round_.start_time} | Fin : {round_.end_time}")
             for match in round_.matches:
                 print(f" → {match}")
+
+    def show_tournament_report(self):
+        if not self.tournaments:
+            self.view.display_message("Aucun tournoi enregistré.")
+            return
+
+        self.show_all_tournaments()
+        index = int(input("Sélectionnez un tournoi (index) : "))
+        tournament = self.tournaments[index]
+        self.resolve_players(tournament)
+        self.view.display_tournament_report(tournament)
+
+    def show_tournament_reports(self):
+        if not self.tournaments:
+            self.view.display_message("Aucun tournoi disponible.")
+            return
+
+        self.view.display_tournaments_list(self.tournaments)
+        try:
+            index = int(input("Sélectionnez un tournoi (index) : "))
+            tournament = self.tournaments[index]
+        except (ValueError, IndexError):
+            self.view.display_message("Index invalide.")
+            return
+
+        self.resolve_players(tournament)
+        sorted_players = sorted(tournament.players, key=lambda p: p.score, reverse=True)
+
+        print("\n=== Tournament Report ===")
+        print(f"Name: {tournament.name}")
+        print(f"Location: {tournament.location}")
+        print(f"Dates: {tournament.start_date} to {tournament.end_date}")
+        print(f"Time control: {tournament.time_control}")
+        print(f"Description: {tournament.description}")
+        print()
+
+        table = PrettyTable()
+        table.field_names = ["Rank", "Player", "Score"]
+
+        for i, player in enumerate(sorted_players, 1):
+            table.add_row([i, f"{player.first_name} {player.last_name}", player.score])
+
+        print(table)

@@ -1,17 +1,17 @@
 from datetime import datetime
+from prettytable import PrettyTable
+
 
 class TournamentView:
     """Vue pour l'interaction avec les tournois (console)."""
 
     def get_tournament_info(self):
         """Demande les informations pour créer un tournoi avec validation."""
-
         print("\nCréation d'un nouveau tournoi :")
 
         name = input("Nom du tournoi : ").strip()
         location = input("Lieu : ").strip()
 
-        # Validation de la date de début
         while True:
             start_date_str = input("Date de début (JJ/MM/AAAA) : ").strip()
             try:
@@ -20,7 +20,6 @@ class TournamentView:
             except ValueError:
                 print("Format invalide. Utilise JJ/MM/AAAA.")
 
-        # Validation de la date de fin
         while True:
             end_date_str = input("Date de fin (JJ/MM/AAAA) : ").strip()
             try:
@@ -32,7 +31,6 @@ class TournamentView:
             except ValueError:
                 print("Format invalide. Utilise JJ/MM/AAAA.")
 
-        # Contrôle du temps
         valid_controls = ["bullet", "blitz", "rapide"]
         while True:
             time_control = input("Contrôle du temps (bullet, blitz, rapide) : ").strip().lower()
@@ -52,7 +50,6 @@ class TournamentView:
         }
 
     def confirm_save(self, tournament):
-        """Message de confirmation de sauvegarde du tournoi."""
         print(f"Tournoi '{tournament.name}' sauvegardé avec succès.")
 
     def display_tournaments_list(self, tournaments):
@@ -60,8 +57,31 @@ class TournamentView:
         print("\nListe des tournois :")
         if not tournaments:
             print("Aucun tournoi trouvé.")
-        for t in tournaments:
-            print(f"- {t.name} à {t.location} du {t.start_date} au {t.end_date}")
+        for i, t in enumerate(tournaments):
+            print(f"{i} - {t.name} à {t.location} du {t.start_date} au {t.end_date}")
+
 
     def display_message(self, message):
         print(f"\n{message}")
+
+    def display_tournament_report(self, tournament):
+        """Affiche uniquement le classement final du tournoi sélectionné."""
+        print("\n=== Tournament Report ===")
+        print(f"Name: {tournament.name}")
+        print(f"Location: {tournament.location}")
+        print(f"Dates: {tournament.start_date} to {tournament.end_date}")
+        print(f"Time control: {tournament.time_control}")
+        print(f"Description: {tournament.description}")
+
+        if not tournament.rounds:
+            print("Ce tournoi n’a pas encore de rounds.")
+            return
+
+        print("\nClassement final :")
+        sorted_players = sorted(tournament.players, key=lambda p: p.score, reverse=True)
+        table = PrettyTable()
+        table.field_names = ["Rang", "Joueur", "Score"]
+        for i, player in enumerate(sorted_players, 1):
+            table.add_row([i, f"{player.first_name} {player.last_name}", player.score])
+        print(table)
+

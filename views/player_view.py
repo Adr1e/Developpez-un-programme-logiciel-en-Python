@@ -1,6 +1,7 @@
 import re
 from datetime import datetime
 
+
 class PlayerView:
     """Vue pour l'interaction avec les joueurs (console)."""
 
@@ -24,7 +25,6 @@ class PlayerView:
             print("Le nom ne doit contenir que des lettres.")
 
         # Validation de la date
-        # Validation de la date
         while True:
             birthdate = input("Date de naissance (JJ/MM/AAAA) : ").strip()
             try:
@@ -35,7 +35,6 @@ class PlayerView:
                 break
             except ValueError:
                 print(" Format invalide. Utilise JJ/MM/AAAA.")
-
 
         # Validation de l'identifiant national
         while True:

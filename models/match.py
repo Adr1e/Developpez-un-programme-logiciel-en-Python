@@ -36,7 +36,6 @@ class Match:
         player1 = Player("", "", "", data["player1"])
         player2 = Player("", "", "", data["player2"])
 
-
         match = cls(player1, player2)
         match.result = tuple(data["result"]) if data["result"] else None
 
