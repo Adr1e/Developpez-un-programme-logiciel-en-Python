@@ -100,9 +100,11 @@ class TournamentController:
                 print("Plus de matchs possibles sans doublon — fin du tournoi.")
                 break
 
-            for p1, p2 in round_matches:
-                print(f"\nMatch : {p1.first_name} vs {p2.first_name}")
+            print(f"\n=== Début du {round_name} ===")
+            for match_index, (p1, p2) in enumerate(round_matches, start=1):
+                print(f"\nMatch {match_index} du {round_name} : {p1.first_name} vs {p2.first_name}")
                 print("(Enter score: 1 = win, 0.5 = draw, 0 = loss or type 'pause' to stop)")
+
                 while True:
                     score1_input = input(f"Score for {p1.first_name} : ").strip()
                     if score1_input.lower() == "pause":
