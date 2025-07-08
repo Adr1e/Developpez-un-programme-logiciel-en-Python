@@ -60,7 +60,6 @@ class TournamentView:
         for i, t in enumerate(tournaments):
             print(f"{i} - {t.name} à {t.location} du {t.start_date} au {t.end_date}")
 
-
     def display_message(self, message):
         print(f"\n{message}")
 
@@ -84,4 +83,3 @@ class TournamentView:
         for i, player in enumerate(sorted_players, 1):
             table.add_row([i, f"{player.first_name} {player.last_name}", player.score])
         print(table)
-

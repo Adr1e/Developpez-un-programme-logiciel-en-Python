@@ -4,11 +4,23 @@ Application de gestion de tournois d’échecs en local, développée en Python 
 
 ## Fonctionnalités
 
-- Ajouter des joueurs avec leur nom, prénom, date de naissance, identifiant national, et classement Elo.
-- Créer des tournois avec nom, lieu, date, description et type de contrôle du temps.
-- Lancer un tournoi avec appairage automatique et saisie des scores.
-- Sauvegarder les données en JSON (joueurs, tournois, rounds, matchs).
-- Afficher les rounds et le classement final du tournoi.
+- Ajouter des joueurs avec leur nom, prénom, date de naissance et identifiant national (format AB12345).
+- Créer des tournois avec nom, lieu, dates, description et type de contrôle du temps (bullet, blitz, rapide).
+- Lancer un tournoi avec appariement automatique sans doublon et saisie des scores.
+- Sauvegarder les données localement en JSON (joueurs, tournois, rounds, matchs).
+- Afficher les rounds, les matchs et le classement final du tournoi.
+- Générer un rapport PEP8 avec flake8-html.
+
+## Prérequis
+
+- Python **3.9+**
+- `pip` (inclus avec Python)
+
+Vérifier votre version de Python :
+
+```bash
+python --version
+```
 
 ## Structure du projet
 
@@ -32,8 +44,16 @@ chess_tournament/
 │   ├── player_view.py
 │   └── tournament_view.py
 │
+├── flake-report/
+│   └── index.html (rapport PEP8)
+│
+├── data/
+│   ├── players.json
+│   └── tournaments.json
+│
 ├── main.py
-└── requirements.txt
+├── requirements.txt
+└── README.md
 ```
 
 ## Installation
@@ -47,11 +67,13 @@ cd chess_tournament
 2. Créer un environnement virtuel  
 ```bash
 python3 -m venv venv
-source venv/bin/activate
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate     # Windows
 ```
 
-3. Installer les dépendances  
+3. Mettre à jour pip et installer les dépendances  
 ```bash
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
@@ -61,15 +83,23 @@ pip install -r requirements.txt
 python main.py
 ```
 
-## Nettoyage du code
+## Vérification PEP8 et rapport flake8
 
-Pour vérifier la conformité PEP8 avec flake8 :
+Pour vérifier que le code respecte les bonnes pratiques :
 
 ```bash
 flake8 .
 ```
 
-Pour appliquer automatiquement certaines corrections :
+Pour générer un rapport HTML :
+
+```bash
+flake8 --format=html --htmldir=flake-report
+```
+
+Le rapport sera consultable dans `flake-report/index.html`.
+
+(Optionnel) Pour reformater automatiquement le code :
 
 ```bash
 autopep8 --in-place --recursive .
@@ -77,7 +107,13 @@ autopep8 --in-place --recursive .
 
 ## Données
 
-Les fichiers JSON générés automatiquement sont :
+Les fichiers JSON sont générés automatiquement :
 
-- players.json : tous les joueurs enregistrés
-- tournaments.json : tous les tournois créés
+- `players.json` : contient tous les joueurs enregistrés.
+- `tournaments.json` : contient tous les tournois créés.
+
+Ces fichiers sont situés dans le dossier `data/`.
+
+---
+
+Projet réalisé en freelance pour un club d'échecs local.
